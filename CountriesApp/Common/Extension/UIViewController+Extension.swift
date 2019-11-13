@@ -22,3 +22,27 @@ extension UIViewController {
         view.endEditing(true)
     }
 }
+
+extension UIView {
+    func configureTableSection(labelText: String) -> UIView? {
+        let format = "H:|-20-[v0]-20-|"
+        
+        let headerLabel: UILabel = {
+            let label = UILabel()
+            label.text = labelText
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = UIColor.getSettingsTextColor()
+            return label
+        }()
+        
+        let viewHeader = UIView()
+        viewHeader.backgroundColor = UIColor.getSettingsBackgroundColor()
+        viewHeader.addSubview(headerLabel)
+        
+        viewHeader.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": headerLabel]))
+        viewHeader.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[v0]-10-|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": headerLabel]))
+        
+        return viewHeader
+    }
+}

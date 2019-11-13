@@ -34,10 +34,8 @@ class CountriesListInteractor: CountriesListBusinessLogic, CountriesListDataStor
   {
     worker = CountriesListWorker()
     worker?.getCountries { (countries) in
-        print(countries?.count)
+        let response = CountriesList.LoadDetail.Response(contries: countries ?? [Country]())
+        self.presenter?.presentCountries(response: response)
     }
-    
-    let response = CountriesList.LoadDetail.Response()
-    presenter?.presentCountries(response: response)
   }
 }

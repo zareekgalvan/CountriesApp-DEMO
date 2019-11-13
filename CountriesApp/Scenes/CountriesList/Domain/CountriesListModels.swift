@@ -15,8 +15,7 @@ import UIKit
 enum CountriesList {
     enum LoadDetail {
         struct Response {
-        }
-        struct ViewModel {
+            var contries: [Country]
         }
     }
 }

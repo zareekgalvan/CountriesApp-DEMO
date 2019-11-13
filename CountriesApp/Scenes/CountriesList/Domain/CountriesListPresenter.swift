@@ -22,7 +22,6 @@ class CountriesListPresenter: CountriesListPresentationLogic {
   // MARK: Do something
   
   func presentCountries(response: CountriesList.LoadDetail.Response) {
-    let viewModel = CountriesList.LoadDetail.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
+    viewController?.viewModel = response.contries
   }
 }

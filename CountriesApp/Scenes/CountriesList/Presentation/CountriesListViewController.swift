@@ -12,34 +12,41 @@
 
 import UIKit
 
-protocol CountriesListDisplayLogic: class
-{
-    func displaySomething(viewModel: CountriesList.LoadDetail.ViewModel)
+protocol CountriesListDisplayLogic: class {
+    var viewModel: [Country] { get set }
 }
 
-class CountriesListViewController: UIViewController, CountriesListDisplayLogic
-{
+class CountriesListViewController: UIViewController, CountriesListDisplayLogic {
+    
+    @IBOutlet weak var countrySearchBar: UISearchBar!
+    @IBOutlet weak var countryTableView: UITableView!
+    
     var interactor: CountriesListBusinessLogic?
     var router: (NSObjectProtocol & CountriesListRoutingLogic & CountriesListDataPassing)?
     
-    // MARK: Object lifecycle
+    var viewModel = [Country]()  {
+        didSet {
+            self.filteredCountries = viewModel
+        }
+    }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
+    var filteredCountries = [Country]() {
+        didSet {
+            self.countryTableView.reloadData()
+        }
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder)
-    {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
     
-    // MARK: Setup
-    
-    private func setup()
-    {
+    private func setup() {
         let viewController = self
         let interactor = CountriesListInteractor()
         let presenter = CountriesListPresenter()
@@ -52,10 +59,7 @@ class CountriesListViewController: UIViewController, CountriesListDisplayLogic
         router.dataStore = interactor
     }
     
-    // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
             if let router = router, router.responds(to: selector) {
@@ -64,26 +68,21 @@ class CountriesListViewController: UIViewController, CountriesListDisplayLogic
         }
     }
     
-    // MARK: View lifecycle
-    
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Countries"
+        self.countryTableView.register(UINib(nibName: "\(CountryTableViewCell.self)", bundle: nil), forCellReuseIdentifier: "\(CountryTableViewCell.self)")
+        self.countryTableView.dataSource = self
+        self.countryTableView.delegate = self
+        self.countrySearchBar.delegate = self
+        self.navigationController?.navigationBar.layer.borderColor = UIColor.appColor().cgColor
+        self.navigationController?.navigationBar.layer.borderWidth = 10.0
+        self.countrySearchBar.layer.borderColor = UIColor.appColor().cgColor
+        self.countrySearchBar.layer.borderWidth = 10.0
         loadCountries()
     }
     
-    
-    
-    //@IBOutlet weak var nameTextField: UITextField!
-    
-    func loadCountries()
-    {
+    func loadCountries() {
         interactor?.getCountries()
-    }
-    
-    func displaySomething(viewModel: CountriesList.LoadDetail.ViewModel)
-    {
-        //nameTextField.text = viewModel.name
     }
 }

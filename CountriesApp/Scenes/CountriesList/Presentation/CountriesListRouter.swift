@@ -14,47 +14,27 @@ import UIKit
 
 @objc protocol CountriesListRoutingLogic
 {
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func showCountryDetails(viewController: UIViewController, country: Country)
 }
 
 protocol CountriesListDataPassing
 {
-  var dataStore: CountriesListDataStore? { get }
+    var dataStore: CountriesListDataStore? { get }
 }
 
 class CountriesListRouter: NSObject, CountriesListRoutingLogic, CountriesListDataPassing
 {
-  weak var viewController: CountriesListViewController?
-  var dataStore: CountriesListDataStore?
-  
-  // MARK: Routing
-  
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
-
-  // MARK: Navigation
-  
-  //func navigateToSomewhere(source: CountriesListViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
-  
-  // MARK: Passing data
-  
-  //func passDataToSomewhere(source: CountriesListDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+    weak var viewController: CountriesListViewController?
+    var dataStore: CountriesListDataStore?
+    
+    func showCountryDetails(viewController: UIViewController, country: Country) {
+        let viewVC = CountryDetailViewController()
+        var destinationDS = viewVC.router!.dataStore!
+        passDataToCountryDetails(source: country, destination: &destinationDS)
+        viewController.navigationController?.pushViewController(viewVC, animated: true)
+    }
+    
+    func passDataToCountryDetails(source: Country, destination: inout CountryDetailDataStore) {
+        destination.country = source
+    }
 }

@@ -23,8 +23,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setUpRootFirstController() {
         window = UIWindow(frame: UIScreen.main.bounds)
         
+        UINavigationBar.appearance().barTintColor = .appColor()
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        
         let initialViewController = CountriesListViewController()
         let navController = UINavigationController(rootViewController: initialViewController)
+        
         guard let window = window else { return }
         window.rootViewController = navController
         window.makeKeyAndVisible()
